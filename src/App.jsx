@@ -1,9 +1,21 @@
 import PropTypes from "prop-types";
+import { useState } from "react";
 Friend.propTypes = {
   friend: PropTypes.string.isRequired,
 };
 Button.propTypes = {
   children: PropTypes.string.isRequired,
+  onClick: PropTypes.string.isRequired,
+};
+Form.propTypes = {
+  friendName: PropTypes.string.isRequired,
+  onsetFriendName: PropTypes.string.isRequired,
+  imageUrl: PropTypes.string.isRequired,
+  onsetImageUrl: PropTypes.string.isRequired,
+  onsetAddFriend: PropTypes.string.isRequired,
+};
+FriendList.propTypes = {
+  updatedFriends: PropTypes.string.isRequired,
 };
 const initialFriends = [
   {
@@ -27,20 +39,57 @@ const initialFriends = [
 ];
 
 function App() {
+  const [friendName, setFriendName] = useState("");
+  const [imageUrl, setImageUrl] = useState("https://i.pravatar.cc/48");
+  const [isOpen, setIsOpen] = useState(false);
+  const id = crypto.randomUUID();
+  const newfriend = {
+    id: id,
+    name: friendName,
+    image: `${imageUrl}?u=${id}`,
+    balance: 0,
+  };
+  const [updatedFriends, setUpdatedFriends] = useState([...initialFriends]);
+  function handleFriendName(e) {
+    setFriendName((friendName) => e.target.value);
+  }
+  function handleImageUrl(e) {
+    setImageUrl((img) => e.target.value);
+  }
+  function handleAddFriend(e) {
+    e.preventDefault();
+    setUpdatedFriends((friend) => [...updatedFriends, newfriend]);
+    setFriendName("");
+  }
+  function toggleForm() {
+    setIsOpen((isOpen) => !isOpen);
+  }
   return (
     <body>
       <div className="main">
         <div className="sidebar">
-          <FriendList />
+          <FriendList updatedFriends={updatedFriends} />
+          {isOpen && (
+            <Form
+              friendName={friendName}
+              onsetFriendName={handleFriendName}
+              imageUrl={imageUrl}
+              onsetImageUrl={handleImageUrl}
+              onsetAddFriend={handleAddFriend}
+            />
+          )}
+          <Button onClick={toggleForm}>
+            {isOpen ? "close" : "Add friend"}
+          </Button>
         </div>
       </div>
     </body>
   );
 }
-function FriendList() {
+function FriendList({ updatedFriends }) {
   return (
     <div className="friendlist">
-      {initialFriends.map((friend) => (
+      {updatedFriends.map((friend) => (
         <Friend key={friend.id} friend={friend} />
       ))}
     </div>
@@ -63,11 +112,33 @@ function Friend({ friend }) {
   );
 }
 
-function Form() {
-  return <div></div>;
+function Form({
+  friendName,
+  onsetFriendName,
+  imageUrl,
+  onsetImageUrl,
+  onsetAddFriend,
+}) {
+  return (
+    <form className="form" onSubmit={onsetAddFriend}>
+      <label htmlFor="">Friend name</label>
+      <input
+        type="text"
+        value={friendName}
+        onChange={(e) => onsetFriendName(e)}
+      />
+      <label htmlFor="">Image Url</label>
+      <input type="text" value={imageUrl} onChange={(e) => onsetImageUrl(e)} />
+      <Button>Add</Button>
+    </form>
+  );
 }
-function Button({ children }) {
-  return <button className="button">{children}</button>;
+function Button({ children, onClick }) {
+  return (
+    <button className="button" onClick={onClick}>
+      {children}
+    </button>
+  );
 }
 
 function FormSplitBill() {
