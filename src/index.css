@@ -26,7 +26,7 @@ body {
   flex-direction: column;
   gap: 3rem;
   padding: 3rem 4rem;
-  background-color: blanchedalmond;
+  background-color: rgb(255, 204, 179);
   border-radius: 10px;
   margin-bottom: 3rem;
 }
@@ -77,13 +77,17 @@ body {
 .form .button {
   grid-column: 2/-1;
 }
-.form label {
+label {
   font-size: 2rem;
 }
-.form input {
+input {
   font-size: 1.5rem;
   text-align: center;
   padding: 0.7rem;
+}
+input:focus {
+  outline: none;
+  border: 2px solid green;
 }
 .form .button {
   font-size: 1.5rem;
@@ -102,4 +106,35 @@ button {
   background-color: #575859;
   color: #fff;
   font-size: 1.9rem;
+}
+.green {
+  color: green;
+}
+.red {
+  color: red;
+}
+.rightbar {
+  padding: 7px 3rem;
+}
+.billform {
+  border: 2px solid green;
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  row-gap: 3rem;
+  padding: 3rem 4rem;
+  border-radius: 10px;
+  background-color: rgb(214, 214, 194);
+}
+.billform h1 {
+  grid-column: span 2;
+}
+.billform .button {
+  grid-column: 2/-1;
+  justify-self: flex-end;
+}
+select {
+  font-size: 1.5rem;
+  padding: 0.7rem;
+  text-align: center;
+  cursor: pointer;
 }

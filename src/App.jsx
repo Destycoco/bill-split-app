@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 Friend.propTypes = {
   friend: PropTypes.string.isRequired,
+  setBillName: PropTypes.string.isRequired,
 };
 Button.propTypes = {
   children: PropTypes.string.isRequired,
@@ -16,7 +17,14 @@ Form.propTypes = {
 };
 FriendList.propTypes = {
   updatedFriends: PropTypes.string.isRequired,
+  setBillName: PropTypes.string.isRequired,
 };
+FormSplitBill.propTypes = {
+  selectedFriend: PropTypes.string.isRequired,
+};
+// FormSplitBill.propTypes = {
+//   children: PropTypes.string.isRequired,
+// };
 const initialFriends = [
   {
     id: 118836,
@@ -42,6 +50,7 @@ function App() {
   const [friendName, setFriendName] = useState("");
   const [imageUrl, setImageUrl] = useState("https://i.pravatar.cc/48");
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedFriend, setSelectedFriend] = useState("Clark");
   const id = crypto.randomUUID();
   const newfriend = {
     id: id,
@@ -58,17 +67,26 @@ function App() {
   }
   function handleAddFriend(e) {
     e.preventDefault();
+    if (!friendName) return;
     setUpdatedFriends((friend) => [...updatedFriends, newfriend]);
     setFriendName("");
   }
   function toggleForm() {
     setIsOpen((isOpen) => !isOpen);
   }
+  function setBillName(person) {
+    setSelectedFriend((friend) => person);
+    setIsOpen((isOpen) => false);
+    console.log(selectedFriend);
+  }
   return (
     <body>
       <div className="main">
         <div className="sidebar">
-          <FriendList updatedFriends={updatedFriends} />
+          <FriendList
+            updatedFriends={updatedFriends}
+            setBillName={setBillName}
+          />
           {isOpen && (
             <Form
               friendName={friendName}
@@ -82,32 +100,43 @@ function App() {
             {isOpen ? "close" : "Add friend"}
           </Button>
         </div>
+        <div className="rightbar">
+          <FormSplitBill selectedFriend={selectedFriend} />
+        </div>
       </div>
     </body>
   );
 }
-function FriendList({ updatedFriends }) {
+function FriendList({ updatedFriends, setBillName }) {
   return (
     <div className="friendlist">
       {updatedFriends.map((friend) => (
-        <Friend key={friend.id} friend={friend} />
+        <Friend key={friend.id} friend={friend} setBillName={setBillName} />
       ))}
     </div>
   );
 }
-function Friend({ friend }) {
+function Friend({ friend, setBillName }) {
   return (
     <div className="friend">
       <img src={friend.image} alt="picture" />
       <h2>{friend.name}</h2>
-      <p>
+      <p
+        className={
+          `${friend.balance}` > 0
+            ? "green"
+            : `${friend.balance}` < 0
+            ? "red"
+            : ""
+        }
+      >
         {friend.balance > 0
           ? `${friend.name} owes you ${friend.balance}`
           : friend.balance < 0
           ? `you owe ${friend.name} ${Math.abs(friend.balance)}`
           : `You and ${friend.name} are even`}
       </p>
-      <Button>select</Button>
+      <Button onClick={() => setBillName(friend.name)}>select</Button>
     </div>
   );
 }
@@ -134,6 +163,12 @@ function Form({
   );
 }
 function Button({ children, onClick }) {
+  // function handleClick() {
+  //   if (onClick) {
+  //     onClick();
+  //   }
+  // }
+
   return (
     <button className="button" onClick={onClick}>
       {children}
@@ -141,7 +176,23 @@ function Button({ children, onClick }) {
   );
 }
 
-function FormSplitBill() {
-  return <div></div>;
+function FormSplitBill({ selectedFriend }) {
+  return (
+    <form className="billform">
+      <h1>{`Split a Bill With ${selectedFriend}`}</h1>
+      <label htmlFor="">Bill Value</label>
+      <input type="number" />
+      <label htmlFor="">Your expense</label>
+      <input type="number" />
+      <label htmlFor="">{`${selectedFriend}'s expense`}</label>
+      <input type="text" disabled />
+      <label htmlFor="">Who is paing the bill</label>
+      <select name="" id="">
+        <option value="">You</option>
+        <option value="">{selectedFriend}</option>
+      </select>
+      <Button>Split Bill</Button>
+    </form>
+  );
 }
 export default App;
