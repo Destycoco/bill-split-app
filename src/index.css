@@ -127,6 +127,9 @@ button {
 }
 .billform h1 {
   grid-column: span 2;
+  font-size: 3rem;
+  text-align: center;
+  font-weight: 700;
 }
 .billform .button {
   grid-column: 2/-1;
