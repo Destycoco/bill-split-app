@@ -16,7 +16,6 @@ body {
   padding: 3rem;
 }
 .sidebar {
-  border: 2px solid red;
   padding: 7px;
 
   /* grid-column: 1/2; */
@@ -72,7 +71,6 @@ body {
   grid-template-columns: 1fr 1.5fr;
   row-gap: 2rem;
   padding: 2.5rem;
-  border: 2px solid red;
   background-color: rgb(244, 212, 212);
   border-radius: 10px;
   margin-bottom: 2rem;

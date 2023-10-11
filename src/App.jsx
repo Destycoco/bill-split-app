@@ -188,9 +188,9 @@ function Friend({ friend, handleSelectedFriend, selectedFriend }) {
         }
       >
         {friend.balance > 0
-          ? `${friend.name} owes you ${friend.balance}`
+          ? `${friend.name} owes you $${friend.balance}`
           : friend.balance < 0
-          ? `you owe ${friend.name} ${Math.abs(friend.balance)}`
+          ? `you owe ${friend.name} $${Math.abs(friend.balance)}`
           : `You and ${friend.name} are even`}
       </p>
       <Button onClick={() => handleSelectedFriend(friend)}>
