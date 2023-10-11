@@ -28,6 +28,7 @@ FormSplitBill.propTypes = {
   whoIsPaying: PropTypes.string.isRequired,
   setWhoIsPaying: PropTypes.string.isRequired,
   friendExpense: PropTypes.string.isRequired,
+  handleSplit: PropTypes.string.isRequired,
 };
 // FormSplitBill.propTypes = {
 //   children: PropTypes.string.isRequired,
@@ -60,8 +61,9 @@ function App() {
   const [selectedFriend, setSelectedFriend] = useState("Clark");
   const [billValue, setBillValue] = useState("");
   const [expense, setExpense] = useState("");
-  const [whoIsPaying, setWhoIsPaying] = useState("User");
+  const [whoIsPaying, setWhoIsPaying] = useState("user");
   const id = crypto.randomUUID();
+
   const newfriend = {
     id: id,
     name: friendName,
@@ -70,6 +72,7 @@ function App() {
   };
   const [updatedFriends, setUpdatedFriends] = useState([...initialFriends]);
   const friendExpense = billValue - expense;
+  const owedExpense = whoIsPaying === "user" ? friendExpense : -expense;
 
   function handleFriendName(e) {
     setFriendName((friendName) => e.target.value);
@@ -91,7 +94,18 @@ function App() {
     setIsOpen((isOpen) => false);
     console.log(selectedFriend);
   }
-
+  function setName(name) {
+    setUpdatedFriends((cur) =>
+      cur.map((friend) =>
+        friend.name === name ? { ...friend, balance: owedExpense } : friend
+      )
+    );
+  }
+  function handleSplit(e) {
+    e.preventDefault();
+    console.log(owedExpense);
+    setName(selectedFriend);
+  }
   return (
     <body>
       <div className="main">
@@ -123,6 +137,7 @@ function App() {
             whoIsPaying={whoIsPaying}
             setWhoIsPaying={setWhoIsPaying}
             friendExpense={friendExpense}
+            handleSplit={handleSplit}
           />
         </div>
       </div>
@@ -133,7 +148,12 @@ function FriendList({ updatedFriends, setBillName }) {
   return (
     <div className="friendlist">
       {updatedFriends.map((friend) => (
-        <Friend key={friend.id} friend={friend} setBillName={setBillName} />
+        <Friend
+          key={friend.id}
+          friend={friend}
+          setBillName={setBillName}
+          // owedExpense={owedExpense}
+        />
       ))}
     </div>
   );
@@ -207,9 +227,10 @@ function FormSplitBill({
   whoIsPaying,
   setWhoIsPaying,
   friendExpense,
+  handleSplit,
 }) {
   return (
-    <form className="billform">
+    <form className="billform" onClick={handleSplit}>
       <h1>{`Split a Bill With ${selectedFriend}`}</h1>
       <label htmlFor="">Bill Value</label>
       <input
