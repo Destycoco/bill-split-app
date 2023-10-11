@@ -24,9 +24,9 @@ body {
 .friendlist {
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  column-gap: 1.5rem;
   padding: 3rem 4rem;
-  background-color: rgb(255, 204, 179);
+  background-color: rgb(244, 225, 215);
   border-radius: 10px;
   margin-bottom: 3rem;
 }
@@ -35,6 +35,9 @@ body {
   grid-template-columns: 6rem auto 7rem;
   align-items: flex-start;
   column-gap: 2rem;
+  padding: 1rem;
+  border-radius: 10px;
+  transition: 0.5s;
 }
 .friend img {
   grid-column: 1;
@@ -140,4 +143,7 @@ select {
   padding: 0.7rem;
   text-align: center;
   cursor: pointer;
+}
+.selected {
+  background-color: rgb(215, 147, 110);
 }
