@@ -3,6 +3,7 @@ import { useState } from "react";
 Friend.propTypes = {
   friend: PropTypes.string.isRequired,
   setBillName: PropTypes.string.isRequired,
+  selectedFriend: PropTypes.string.isRequired,
 };
 Button.propTypes = {
   children: PropTypes.string.isRequired,
